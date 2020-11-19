@@ -29,3 +29,11 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+  github-context:
+    name: GitHub Context
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${GITHUB_CONTEXT}"
