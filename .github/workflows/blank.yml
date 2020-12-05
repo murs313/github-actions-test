@@ -54,12 +54,9 @@ jobs:
       env:
         number: ${{ steps.find-pull-request.outputs.number }}
         sha: ${{ steps.find-pull-request.outputs.head-sha }}
-  pull-request:
-    runs-on: ubuntu-latest
-    steps:
     - name: pull-request
       uses: repo-sync/pull-request@v2
-      if: ${{ steps.find-pull-request.outputs.number == null }}
+      if: ${{ number == null }}
       with:
         destination_branch: "release"
         github_token: ${{ secrets.GITHUB_TOKEN }}
