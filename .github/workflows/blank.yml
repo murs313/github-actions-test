@@ -59,7 +59,7 @@ jobs:
     steps:
     - name: pull-request
       uses: repo-sync/pull-request@v2
-      if: ${{ number == null }}
+      if: ${{ steps.find-pull-request.outputs.number == null }}
       with:
         destination_branch: "release"
         github_token: ${{ secrets.GITHUB_TOKEN }}
