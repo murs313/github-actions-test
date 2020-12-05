@@ -41,19 +41,6 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "${GITHUB_ACTOR}"
-  find-release-pull-request:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Find Pull Request
-      uses: juliangruber/find-pull-request-action@v1
-      id: find-pull-request
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        branch: release
-    - run: echo "Pull Request ${number} (${sha})"
-      env:
-        number: ${{ steps.find-pull-request.outputs.number }}
-        sha: ${{ steps.find-pull-request.outputs.head-sha }}
   find-main-pull-request:
     runs-on: ubuntu-latest
     steps:
@@ -67,3 +54,12 @@ jobs:
       env:
         number: ${{ steps.find-pull-request.outputs.number }}
         sha: ${{ steps.find-pull-request.outputs.head-sha }}
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      if: ${{ number == null }}
+      with:
+        destination_branch: "release"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
