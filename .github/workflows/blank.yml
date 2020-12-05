@@ -54,7 +54,7 @@ jobs:
       env:
         number: ${{ steps.find-pull-request.outputs.number }}
         sha: ${{ steps.find-pull-request.outputs.head-sha }}
-  find-master-pull-request:
+  find-main-pull-request:
     runs-on: ubuntu-latest
     steps:
     - name: Find Pull Request
@@ -62,7 +62,7 @@ jobs:
       id: find-pull-request
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        branch: master
+        branch: main
     - run: echo "Pull Request ${number} (${sha})"
       env:
         number: ${{ steps.find-pull-request.outputs.number }}
