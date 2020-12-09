@@ -38,3 +38,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PULL_REQUEST_BRANCH: release
+        PULL_REQUEST_TITLE: Release
+        PULL_REQUEST_BODY: ''
+        PULL_REQUEST_REVIEWERS: ${{ GITHUB_ACTOR }}
