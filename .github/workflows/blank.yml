@@ -35,3 +35,5 @@ jobs:
         number: ${{ steps.find-pull-request.outputs.number }}
     - name: Pull Request Action
       uses: vsoch/pull-request-action@1.0.12
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
