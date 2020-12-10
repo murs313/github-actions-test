@@ -17,7 +17,7 @@ jobs:
         PULL_REQUEST_BODY: ''
         PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
         PULL_REQUEST_REVIEWERS: ${{ github.actor }}
-    - name: Find Pull Request
+    - name: Find pull request
       uses: juliangruber/find-pull-request-action@v1
       id: find-pull-request
       with:
@@ -29,4 +29,3 @@ jobs:
       with:
         pull-request-number: ${{ steps.find-pull-request.outputs.number }}
         reviewers: ${{ github.actor }}
-        token: ${{ secrets.GITHUB_TOKEN }}
