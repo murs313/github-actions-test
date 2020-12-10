@@ -42,12 +42,8 @@ jobs:
         PULL_REQUEST_BODY: ''
         PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
         PULL_REQUEST_REVIEWERS: ${{ github.actor }}
-  hello_world_job:
-    runs-on: ubuntu-latest
-    name: A job to say hello
-    steps:
-      - name: Hello world action step
-        id: hello
-        uses: murs313/request-review@main
-        with:
-          number-of-pull-request: ${{ steps.find-pull-request.outputs.number }}
+    - name: Hello world action step
+      id: hello
+      uses: murs313/request-review@main
+      with:
+        number-of-pull-request: ${{ steps.find-pull-request.outputs.number }}
