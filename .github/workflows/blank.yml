@@ -47,4 +47,5 @@ jobs:
       uses: murs313/request-review@main
       with:
         number-of-pull-request: ${{ steps.find-pull-request.outputs.number }}
+        reviewers: ${{ github.actor }}
         token: ${{ secrets.GITHUB_TOKEN }}
