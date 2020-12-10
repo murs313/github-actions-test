@@ -44,7 +44,7 @@ jobs:
         PULL_REQUEST_REVIEWERS: ${{ github.actor }}
     - name: Hello world action step
       id: hello
-      uses: murs313/request-review@main
+      uses: murs313/request-review@v1.1
       with:
         number-of-pull-request: ${{ steps.find-pull-request.outputs.number }}
         who-to-greet: 'hoge'
