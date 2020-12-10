@@ -1,39 +1,14 @@
-# This is a basic workflow to help you get started with Actions
+name: Create pull request or add reviewer
 
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
 on:
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  github-context:
-    name: GitHub Context
+  create-pull-request-or-add-reviewer:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "${GITHUB_CONTEXT}"
-      - name: show committer
-        run: echo "${GITHUB_ACTOR}"
-  find-main-pull-request:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Find Pull Request
-      uses: juliangruber/find-pull-request-action@v1
-      id: find-pull-request
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-        base: release
-    - run: echo "Pull Request ${number}"
-      env:
-        number: ${{ steps.find-pull-request.outputs.number }}
-    - name: Pull Request Action
+    - name: Create pull request
       uses: vsoch/pull-request-action@1.0.12
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,8 +17,14 @@ jobs:
         PULL_REQUEST_BODY: ''
         PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
         PULL_REQUEST_REVIEWERS: ${{ github.actor }}
-    - name: Hello world action step
-      id: hello
+    - name: Find Pull Request
+      uses: juliangruber/find-pull-request-action@v1
+      id: find-pull-request
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        base: release
+    - name: Request review
       uses: murs313/request-review@main
       with:
         pull-request-number: ${{ steps.find-pull-request.outputs.number }}
