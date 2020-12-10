@@ -47,3 +47,4 @@ jobs:
       uses: murs313/request-review@main
       with:
         number-of-pull-request: ${{ steps.find-pull-request.outputs.number }}
+        who-to-greet: 'hoge'
