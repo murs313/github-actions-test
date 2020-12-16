@@ -29,3 +29,4 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         reviewers: ${{ github.actor }}
+        pull-request-number: ${{ steps.find-pull-request.outputs.number }}
