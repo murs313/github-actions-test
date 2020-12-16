@@ -1,8 +1,8 @@
 name: Create pull request or add reviewer
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    types: opened
 
 jobs:
   create-pull-request-or-add-reviewer:
@@ -27,5 +27,5 @@ jobs:
     - name: Request review
       uses: murs313/request-review@main
       with:
-        pull-request-number: ${{ steps.find-pull-request.outputs.number }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        reviewers: ${{ github.actor }}
