@@ -8,22 +8,6 @@ jobs:
   create-pull-request-or-add-reviewer:
     runs-on: ubuntu-latest
     steps:
-    - name: Create pull request
-      uses: vsoch/pull-request-action@1.0.12
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PULL_REQUEST_BRANCH: release
-        PULL_REQUEST_TITLE: Release
-        PULL_REQUEST_BODY: ''
-        PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
-        PULL_REQUEST_REVIEWERS: ${{ github.actor }}
-    - name: Find pull request
-      uses: juliangruber/find-pull-request-action@v1
-      id: find-pull-request
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-        base: release
     - name: Request review
       uses: murs313/request-review@main
       with:
