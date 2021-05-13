@@ -1,16 +1,14 @@
 name: Add release tag and update develop branch
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [closed]
 
 jobs:
   github-context:
     name: GitHub Context
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Dump GitHub Context
         env:
