@@ -27,6 +27,7 @@ jobs:
           custom_tag: ${{ steps.split.outputs._1 }}
           tag_prefix: 'v/'
       - name: Create a gitHub release
+        id: release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,3 +35,9 @@ jobs:
           tag_name: ${{ steps.push_tag.outputs.new_tag }}
           release_name: v${{ steps.push_tag.outputs.new_version }}
           body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.push_tag.outputs.new_version }}
+      - name: Commit comment
+        uses: peter-evans/commit-comment@v1.3.2
+        with:
+          body: |
+            Created release tag!
+            ${{ release.html_url }}
