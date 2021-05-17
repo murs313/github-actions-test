@@ -1,19 +1,50 @@
-name: Bump version
+name: Add release tag and create pull-request for develop branch
+
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [closed]
+
 jobs:
-  build:
+  github-context:
+    name: GitHub Context
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
+      - name: Dump GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${github.head_ref}  ${GITHUB_CONTEXT}"
+
+      - uses: jungwinter/split@v1
+        id: split
+        with:
+          msg: ${{ github.head_ref }}
+          seperator: '/'
+
+      # - name: release package
+      #   if: steps.split.outputs._0 == '/release'
+      #   uses: actions/create-release@latest
+      #   with:
+      #     release_name: Release ${{ steps.split.outputs._1 }}
+      #     tag_name: ${{ steps.split.outputs._2 }}
+
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: '4.0.0'
+          custom_tag: ${{ steps.split.outputs._1 }}
           tag_prefix: 'v/'
       - name: Create a GitHub release
         uses: actions/create-release@v1
@@ -21,24 +52,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-
-# name: Add release tag and update develop branch
-
-# on:
-#   pull_request:
-#     branches:
-#       - main
-#     types: [closed]
-
-# jobs:
-#   github-context:
-#     name: GitHub Context
-#     runs-on: ubuntu-latest
-#     if: github.event.pull_request.merged == true
-#     steps:
-#       - name: Dump GitHub Context
-#         env:
-#           GITHUB_CONTEXT: ${{ toJson(github) }}
-#         run: echo "${GITHUB_CONTEXT}"
+          release_name: 'v${ steps.tag_version.outputs.new_version}'
+          body: 'https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${steps.tag_version.outputs.new_version}'
