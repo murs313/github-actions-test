@@ -7,50 +7,47 @@ on:
     types: [closed]
 
 jobs:
-  github-context:
-    name: GitHub Context
+  add-release-tag:
+    name: Add release tag
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
-    steps:
-      - name: Dump GitHub Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "${GITHUB_CONTEXT}"
 
+    steps:
+      - uses: actions/checkout@v2
       - uses: jungwinter/split@v1
         id: split
         with:
           msg: ${{ github.head_ref }}
           seperator: '/'
-
-      # - name: release package
-      #   if: steps.split.outputs._0 == '/release'
-      #   uses: actions/create-release@latest
-      #   with:
-      #     release_name: Release ${{ steps.split.outputs._1 }}
-      #     tag_name: ${{ steps.split.outputs._2 }}
-
-# on:
-#   push:
-#     branches:
-#       - main
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-      - uses: actions/checkout@v2
-      - name: Bump version and push tag
-        id: tag_version
+      - name: Push tag
+        id: push_tag
+        if: steps.split.outputs._0 == 'qa'
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.split.outputs._1 }}
           tag_prefix: 'v/'
-      - name: Create a GitHub release
+      - name: Create a gitHub release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: v${{ steps.tag_version.outputs.new_version }}
-          body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.tag_version.outputs.new_version }}
+          tag_name: ${{ steps.push_tag.outputs.new_tag }}
+          release_name: v${{ steps.push_tag.outputs.new_version }}
+          body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.push_tag.outputs.new_version }}
+
+  create-pull-request-for-develop-branch:
+    name: Create pull-request for develop branch
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Create pull request
+        uses: vsoch/pull-request-action@1.0.12
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: develop
+          PULL_REQUEST_TITLE: Release
+          PULL_REQUEST_BODY: ''
+          PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
+          PULL_REQUEST_REVIEWERS: ${{ github.actor }}
