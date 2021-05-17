@@ -1,4 +1,4 @@
-name: Add release tag and create pull-request for develop branch
+name: Create release tag
 
 on:
   pull_request:
@@ -7,11 +7,10 @@ on:
     types: [closed]
 
 jobs:
-  add-release-tag:
-    name: Add release tag
+  create-release-tag:
+    name: Create release tag
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
-
     steps:
       - uses: actions/checkout@v2
       - uses: jungwinter/split@v1
@@ -35,19 +34,3 @@ jobs:
           tag_name: ${{ steps.push_tag.outputs.new_tag }}
           release_name: v${{ steps.push_tag.outputs.new_version }}
           body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.push_tag.outputs.new_version }}
-
-  create-pull-request-for-develop-branch:
-    name: Create pull-request for develop branch
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-
-    steps:
-      - name: Create pull request
-        uses: vsoch/pull-request-action@1.0.12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_REQUEST_BRANCH: develop
-          PULL_REQUEST_TITLE: Release
-          PULL_REQUEST_BODY: ''
-          PULL_REQUEST_ASSIGNEES: ${{ github.actor }}
-          PULL_REQUEST_REVIEWERS: ${{ github.actor }}
