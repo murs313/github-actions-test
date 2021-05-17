@@ -39,7 +39,7 @@ jobs:
       - name: Dump GitHub Context
         env:
           GITHUB_CONTEXT: ${{ toJson(steps.release) }}
-        run: echo "${GITHUB_CONTEXT}"
+        run: echo "${steps.release.html_url}"
       - name: Add PR Comment
         uses: mshick/add-pr-comment@v1
         with:
@@ -47,3 +47,6 @@ jobs:
           message: |
             Created release tag!
             ${{ steps.release.html_url }}
+            ${{ steps.release.id }}
+            ${steps.release.html_url}
+            ${steps.release.id}
