@@ -15,7 +15,7 @@ jobs:
       - name: Dump GitHub Context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "${github.head_ref}  ${GITHUB_CONTEXT}"
+        run: echo "${GITHUB_CONTEXT}"
 
       - uses: jungwinter/split@v1
         id: split
