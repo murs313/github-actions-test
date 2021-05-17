@@ -3,6 +3,7 @@ name: Create pull request of master to develop
 on:
   push:
     branches: [ main ]
+
 jobs:
   create-pull-request:
     name: Create pull request
