@@ -42,7 +42,4 @@ jobs:
           repo-token: ${{secrets.GITHUB_TOKEN}}
           message: |
             Created release tag!
-            ${{ steps.release.html_url }}
-            ${{ steps.release.id }}
-            ${steps.release.html_url}
-            ${steps.release.id}
+            ${{ steps.release.outputs.html_url }}
