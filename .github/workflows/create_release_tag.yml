@@ -36,6 +36,10 @@ jobs:
           tag_name: ${{ steps.push_tag.outputs.new_tag }}
           release_name: v${{ steps.push_tag.outputs.new_version }}
           body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.push_tag.outputs.new_version }}
+      - name: Dump GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(steps.release) }}
+        run: echo "${GITHUB_CONTEXT}"
       - name: Add PR Comment
         uses: mshick/add-pr-comment@v1
         with:
