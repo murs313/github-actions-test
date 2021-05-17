@@ -40,4 +40,4 @@ jobs:
         with:
           body: |
             Created release tag!
-            ${{ release.html_url }}
+            ${{ steps.release.html_url }}
