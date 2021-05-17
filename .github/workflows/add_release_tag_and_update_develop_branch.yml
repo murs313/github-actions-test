@@ -52,5 +52,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: 'v${ steps.tag_version.outputs.new_version}'
-          body: 'https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${steps.tag_version.outputs.new_version}'
+          release_name: v${{ steps.tag_version.outputs.new_version }}
+          body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.tag_version.outputs.new_version }}
