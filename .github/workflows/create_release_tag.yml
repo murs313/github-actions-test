@@ -6,7 +6,6 @@ on:
       - main
     types: [closed]
 
-
 jobs:
   create-release-tag:
     name: Create release tag
