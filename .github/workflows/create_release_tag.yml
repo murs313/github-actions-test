@@ -27,9 +27,9 @@ jobs:
         with:
           msg: ${{ github.head_ref }}
           seperator: '/'
+      - if: steps.split.outputs._0 == 'qa'
       - name: Push tag
         id: push_tag
-        if: steps.split.outputs._0 == 'qa'
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
