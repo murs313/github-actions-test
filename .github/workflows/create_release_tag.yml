@@ -14,14 +14,22 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
+      - name: Create pull request
+        uses: vsoch/pull-request-action@1.0.17
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_FROM_BRANCH: ${{ github.head_ref }}
+          PULL_REQUEST_BRANCH: develop
+          PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
+          PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
       - uses: jungwinter/split@v1
         id: split
         with:
           msg: ${{ github.head_ref }}
           seperator: '/'
+      - if: steps.split.outputs._0 == 'qa'
       - name: Push tag
         id: push_tag
-        if: steps.split.outputs._0 == 'qa'
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,6 +47,7 @@ jobs:
       - name: Add PR Comment
         uses: mshick/add-pr-comment@v1
         with:
+          repo-token: ${{secrets.GITHUB_TOKEN}}
           message: |
-            Created release tag!
-            ${{ steps.release.html_url }}
+            The release tag was created!
+            ${{ steps.release.outputs.html_url }}
