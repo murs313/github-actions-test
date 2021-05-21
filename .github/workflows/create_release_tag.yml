@@ -6,7 +6,6 @@ on:
       - main
     types: [closed]
 
-
 jobs:
   create-release-tag:
     name: Create release tag
@@ -14,6 +13,13 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
+      - name: Create pull request
+        uses: vsoch/pull-request-action@1.0.17
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: develop
+          PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
+          PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
       - uses: jungwinter/split@v1
         id: split
         with:
@@ -41,5 +47,5 @@ jobs:
         with:
           repo-token: ${{secrets.GITHUB_TOKEN}}
           message: |
-            Created release tag!
+            The release tag was created!
             ${{ steps.release.outputs.html_url }}
