@@ -7,8 +7,8 @@ on:
     types: [closed]
 
 jobs:
-  create-release-tag:
-    name: Create release tag
+  create-pull-request:
+    name: Create pull request
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
@@ -20,6 +20,12 @@ jobs:
           PULL_REQUEST_BRANCH: develop
           PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
           PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
+
+  create-release-tag:
+    name: Create release tag
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
       - uses: jungwinter/split@v1
         id: split
         with:
