@@ -1,4 +1,4 @@
-name: Create release tag
+name: Sync develop and main and create release tag
 
 on:
   pull_request:
@@ -7,19 +7,19 @@ on:
     types: [closed]
 
 jobs:
-  create-pull-request:
-    name: Create pull request
+  sync-develop-and-main:
+    name: Sync develop and main
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - name: Create pull request
+      - name: Sync develop and main
         uses: vsoch/pull-request-action@1.0.17
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_REQUEST_FROM_BRANCH: main
           PULL_REQUEST_BRANCH: develop
-          PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
-          PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
+          PULL_REQUEST_TITLE: Update develop to main contains ${{ github.head_ref }}
+          PULL_REQUEST_BODY: Update develop to main contains ${{ github.head_ref }}
 
   create-release-tag:
     name: Create release tag
