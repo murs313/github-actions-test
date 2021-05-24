@@ -6,22 +6,26 @@ on:
       - main
     types: [closed]
 
-
 jobs:
+  create-pull-request:
+    name: Create pull request
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Create pull request
+        uses: vsoch/pull-request-action@1.0.17
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_FROM_BRANCH: main
+          PULL_REQUEST_BRANCH: develop
+          PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
+          PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
+
   create-release-tag:
     name: Create release tag
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - uses: actions/checkout@v2
-      - name: Create pull request
-        uses: vsoch/pull-request-action@1.0.17
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_REQUEST_FROM_BRANCH: ${{ github.head_ref }}
-          PULL_REQUEST_BRANCH: develop
-          PULL_REQUEST_TITLE: Update develop to ${{ github.head_ref }}
-          PULL_REQUEST_BODY: Update develop to ${{ github.head_ref }}
       - uses: jungwinter/split@v1
         id: split
         with:
@@ -37,6 +41,7 @@ jobs:
           tag_prefix: 'v/'
       - name: Create a gitHub release
         id: release
+        if: steps.split.outputs._0 == 'qa'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,6 +51,7 @@ jobs:
           body: https://zozo.rickcloud.jp/wiki/display/WEAR/Android_Ver${{ steps.push_tag.outputs.new_version }}
       - name: Add PR Comment
         uses: mshick/add-pr-comment@v1
+        if: steps.split.outputs._0 == 'qa'
         with:
           repo-token: ${{secrets.GITHUB_TOKEN}}
           message: |
